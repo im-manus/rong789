@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rong Bahari (রং বাহারী) - Premium Paint & Decor Store</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fdf4f5',
+                            100: '#fbe8eb',
+                            500: '#e63946',
+                            600: '#d90429',
+                            700: '#b7091c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(230, 57, 70, 0.05) 0%, rgba(69, 123, 157, 0.05) 50%, rgba(42, 157, 143, 0.05) 100%), 
+                        radial-gradient(circle at 10% 20%, rgba(255, 183, 3, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(67, 97, 238, 0.1) 0%, transparent 40%);
+        }
+        .color-swatch-shadow {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Notification / Modal Banner -->
+    <div id="notificationModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden transition-all duration-300">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300" id="modalContent">
+            <div class="text-center">
+                <div id="modalIconContainer" class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+                </div>
+                <h3 id="modalTitle" class="text-lg font-bold text-slate-900 mb-2">Success!</h3>
+                <p id="modalMessage" class="text-slate-600 text-sm mb-6">Your action was completed successfully.</p>
+                <button onclick="closeModal()" class="w-full py-2.5 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-600 via-amber-500 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition">
+                        <i data-lucide="palette" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-slate-900">Rong <span class="text-brand-600">Bahari</span></span>
+                        <span class="block text-xs font-semibold text-slate-400 -mt-1 tracking-wider uppercase">রং বাহারী — রঙে রঙে সাজুক মন</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600">
+                    <a href="#home" class="hover:text-brand-600 transition">Home</a>
+                    <a href="#catalog" class="hover:text-brand-600 transition">Products</a>
+                    <a href="#calculator" class="hover:text-brand-600 transition">Paint Calculator</a>
+                    <a href="#services" class="hover:text-brand-600 transition">Services</a>
+                    <a href="#testimonials" class="hover:text-brand-600 transition">Reviews</a>
+                    <a href="#contact" class="hover:text-brand-600 transition">Contact</a>
+                </nav>
+
+                <!-- Action Button -->
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="tel:+8801700000000" class="flex items-center gap-2 text-slate-700 font-semibold text-sm hover:text-brand-600 transition">
+                        <div class="w-9 h-9 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center">
+                            <i data-lucide="phone-call" class="w-4 h-4"></i>
+                        </div>
+                        <span>+7602226499</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-6 space-y-3 shadow-lg">
+            <a href="#home" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium hover:text-brand-600">Home</a>
+            <a href="#catalog" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium hover:text-brand-600">Products</a>
+            <a href="#calculator" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium hover:text-brand-600">Paint Calculator</a>
+            <a href="#services" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium hover:text-brand-600">Services</a>
+            <a href="#testimonials" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium hover:text-brand-600">Reviews</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium hover:text-brand-600">Contact</a>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-sm text-slate-500">Call Support</span>
+                <a href="tel:+8801700000000" class="text-brand-600 font-semibold text-sm">+880 1700-000000</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative hero-gradient overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Text -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-brand-600 text-xs font-semibold uppercase tracking-wider animate-pulse">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                        <span>Welcome to Rong Bahari — রঙ বাহারী</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                        Transform Your Space With <span class="bg-gradient-to-r from-brand-600 via-amber-500 to-emerald-600 bg-clip-text text-transparent">Vibrant Colors</span>
+                    </h1>
+                    <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0">
+                        Explore premium interior, exterior, waterproofing paints and expert tinting solutions. Give your home the luxurious finish it deserves with Rong Bahari's long-lasting shades.
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#catalog" class="px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-2xl shadow-xl shadow-brand-500/25 flex items-center gap-2 transition transform hover:-translate-y-0.5">
+                            <span>Explore Catalog</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#calculator" class="px-8 py-4 bg-white hover:bg-slate-50 text-slate-700 font-semibold rounded-2xl border border-slate-200 shadow-sm flex items-center gap-2 transition">
+                            <i data-lucide="calculator" class="w-4 h-4 text-brand-600"></i>
+                            <span>Paint Cost Calculator</span>
+                        </a>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-3 gap-6 pt-8 border-t border-slate-200/60 mt-8">
+                        <div>
+                            <p class="text-2xl lg:text-3xl font-extrabold text-slate-900">500+</p>
+                            <p class="text-xs sm:text-sm text-slate-500">Color Shades</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl lg:text-3xl font-extrabold text-slate-900">100%</p>
+                            <p class="text-xs sm:text-sm text-slate-500">Genuine Quality</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl lg:text-3xl font-extrabold text-slate-900">10 yrs</p>
+                            <p class="text-xs sm:text-sm text-slate-500">Durability Warranty</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Visual Showcase -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        <!-- Decorative gradient blur -->
+                        <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-500 via-amber-500 to-emerald-500 rounded-3xl blur-xl opacity-30 animate-pulse"></div>
+                        
+                        <div class="relative bg-white p-4 rounded-3xl shadow-2xl border border-slate-100">
+                            <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop" alt="Painter painting wall" class="w-full h-80 object-cover rounded-2xl mb-4">
+                            
+                            <!-- Floating Color Palette Card -->
+                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Trending Palettes 2026</p>
+                                <div class="grid grid-cols-5 gap-2">
+                                    <div class="group relative cursor-pointer" onclick="selectColor('#E63946', 'Crimson Passion')">
+                                        <div class="h-10 rounded-xl bg-[#E63946] color-swatch-shadow transition group-hover:scale-105"></div>
+                                        <span class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">Crimson</span>
+                                    </div>
+                                    <div class="group relative cursor-pointer" onclick="selectColor('#457B9D', 'Serene Blue')">
+                                        <div class="h-10 rounded-xl bg-[#457B9D] color-swatch-shadow transition group-hover:scale-105"></div>
+                                        <span class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">Serene Blue</span>
+                                    </div>
+                                    <div class="group relative cursor-pointer" onclick="selectColor('#2A9D8F', 'Mint Teal')">
+                                        <div class="h-10 rounded-xl bg-[#2A9D8F] color-swatch-shadow transition group-hover:scale-105"></div>
+                                        <span class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">Mint Teal</span>
+                                    </div>
+                                    <div class="group relative cursor-pointer" onclick="selectColor('#E9C46A', 'Sunny Gold')">
+                                        <div class="h-10 rounded-xl bg-[#E9C46A] color-swatch-shadow transition group-hover:scale-105"></div>
+                                        <span class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">Sunny Gold</span>
+                                    </div>
+                                    <div class="group relative cursor-pointer" onclick="selectColor('#264653', 'Deep Slate')">
+                                        <div class="h-10 rounded-xl bg-[#264653] color-swatch-shadow transition group-hover:scale-105"></div>
+                                        <span class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">Deep Slate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Catalog Section -->
+    <section id="catalog" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-brand-600 font-semibold text-sm uppercase tracking-wider">Our Product Collection</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">Choose The Perfect Paint</h2>
+                <p class="text-slate-600">Browse through our high-grade categorization designed for weather resistance, silky finish, and ultimate protection.</p>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="flex flex-wrap items-center justify-center gap-2 mb-12" id="categoryTabs">
+                <button onclick="filterProducts('all')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-medium bg-slate-900 text-white shadow-sm transition">All Products</button>
+                <button onclick="filterProducts('Interior')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Interior Emulsion</button>
+                <button onclick="filterProducts('Exterior')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Exterior Shield</button>
+                <button onclick="filterProducts('Enamel')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Gloss Enamel</button>
+                <button onclick="filterProducts('Waterproofing')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Waterproofing</button>
+                <button onclick="filterProducts('Primer')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Primers</button>
+            </div>
+
+            <!-- Product Cards Grid -->
+            <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Paint Quantity & Cost Calculator Section -->
+    <section id="calculator" class="py-20 bg-slate-900 text-white relative overflow-hidden">
+        <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-brand-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-20 -top-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-brand-500 font-semibold text-sm uppercase tracking-wider">Smart Estimator</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2 mb-4">Paint Quantity & Cost Calculator</h2>
+                <p class="text-slate-400">Calculate how many liters of paint you need and get an instant cost estimate for your room or house.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                
+                <!-- Calculator Form -->
+                <div class="lg:col-span-7 bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-3xl p-6 sm:p-8 shadow-xl">
+                    <form id="paintCalcForm" onsubmit="calculatePaint(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Room Length (Feet)</label>
+                                <input type="number" id="roomLength" required min="1" step="0.1" value="15" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Room Width (Feet)</label>
+                                <input type="number" id="roomWidth" required min="1" step="0.1" value="12" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-500 transition">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Wall Height (Feet)</label>
+                                <input type="number" id="roomHeight" required min="1" step="0.1" value="10" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Select Paint Category</label>
+                                <select id="paintType" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-500 transition">
+                                    <option value="interior">Interior Emulsion (৳450/L)</option>
+                                    <option value="exterior">Exterior Shield (৳520/L)</option>
+                                    <option value="enamel">Gloss Enamel (৳600/L)</option>
+                                    <option value="waterproofing">Waterproofing Guard (৳650/L)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Number of Doors & Windows</label>
+                                <input type="number" id="openings" required min="0" value="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Number of Coats</label>
+                                <select id="coats" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-500 transition">
+                                    <option value="2">2 Coats (Standard)</option>
+                                    <option value="3">3 Coats (Premium Finish)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl shadow-lg shadow-brand-600/30 transition flex items-center justify-center gap-2">
+                            <i data-lucide="calculator" class="w-5 h-5"></i>
+                            <span>Calculate Estimate Now</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Calculation Result Box -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-slate-800 to-slate-800/60 border border-slate-700/60 rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-700">
+                            <h3 class="text-xl font-bold text-white">Estimation Result</h3>
+                            <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-xs font-semibold rounded-full border border-emerald-500/20">Instant Quote</span>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400 text-sm">Total Wall Area:</span>
+                                <span id="resArea" class="text-lg font-bold text-white">540 sq.ft</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400 text-sm">Paint Required:</span>
+                                <span id="resLiters" class="text-lg font-bold text-brand-400">12 Liters</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400 text-sm">Estimated Cost:</span>
+                                <span id="resCost" class="text-2xl font-black text-emerald-400">৳5,400</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-slate-700">
+                        <button onclick="orderCalculatedPaint()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                            <span>Book This Estimate</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-brand-600 font-semibold text-sm uppercase tracking-wider">What We Offer</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">Professional Paint Services</h2>
+                <p class="text-slate-600">Beyond just selling paint, we provide end-to-end color consultation and execution solutions.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Service 1 -->
+                <div class="bg-slate-50 hover:bg-white p-8 rounded-3xl border border-slate-100 hover:border-brand-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mb-6 group-hover:bg-brand-600 group-hover:text-white transition">
+                        <i data-lucide="brush" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Color Consultation</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Get expert advice on shade pairing, lighting effects, and vastu-friendly colors for your rooms.</p>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-slate-50 hover:bg-white p-8 rounded-3xl border border-slate-100 hover:border-brand-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mb-6 group-hover:bg-brand-600 group-hover:text-white transition">
+                        <i data-lucide="shield-check" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Waterproofing Solutions</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Advanced damp-proof coating and roof treatments to keep walls leakage and moisture free.</p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-slate-50 hover:bg-white p-8 rounded-3xl border border-slate-100 hover:border-brand-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mb-6 group-hover:bg-brand-600 group-hover:text-white transition">
+                        <i data-lucide="sliders" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Computerized Tinting</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Match any color you desire with our advanced computerized shade mixing machine instantly.</p>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="bg-slate-50 hover:bg-white p-8 rounded-3xl border border-slate-100 hover:border-brand-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mb-6 group-hover:bg-brand-600 group-hover:text-white transition">
+                        <i data-lucide="truck" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Doorstep Delivery</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Fast and safe delivery of paint buckets and accessories directly to your construction or home site.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-brand-600 font-semibold text-sm uppercase tracking-wider">Customer Reviews</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">Trusted By Homeowners & Contractors</h2>
+                <p class="text-slate-600">See what our valued customers have to say about Rong Bahari's colors and services.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 mb-4">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                        <p class="text-slate-600 text-sm italic mb-6">"Rong Bahari's interior emulsion gave our living room a royal matte finish. The color matching service is amazingly accurate!"</p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+                        <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-600 font-bold flex items-center justify-center">AR</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Anisur Rahman</h4>
+                            <p class="text-xs text-slate-500">Homeowner, Dhaka</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 mb-4">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                        <p class="text-slate-600 text-sm italic mb-6">"As a contractor, I always source exterior weather shield and waterproofing from Rong Bahari. Excellent durability and prices."</p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 font-bold flex items-center justify-center">SK</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Tanvir Ahmed</h4>
+                            <p class="text-xs text-slate-500">Lead Civil Contractor</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 mb-4">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-half"></i>
+                        </div>
+                        <p class="text-slate-600 text-sm italic mb-6">"Very helpful staff and great color consultant. They helped us choose the exact pastel shades we wanted for our new apartment."</p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 font-bold flex items-center justify-center">NS</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Nusrat Sultana</h4>
+                            <p class="text-xs text-slate-500">Architect</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Contact Info -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div>
+                        <span class="text-brand-600 font-semibold text-sm uppercase tracking-wider">Get In Touch</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">Visit Our Store Or Send Us A Message</h2>
+                        <p class="text-slate-600 text-sm">Have questions about paint shades, waterproofing or bulk orders? Reach out to our team today.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Store Location</h4>
+                                <p class="text-slate-600 text-sm">124/A, Main Color Plaza, New Market Road, Dhaka</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="phone" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Phone & Helpline</h4>
+                                <p class="text-slate-600 text-sm">+880 1700-000000 / +880 2-9876543</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Email Support</h4>
+                                <p class="text-slate-600 text-sm">support@rongbahari.com</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="clock" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Working Hours</h4>
+                                <p class="text-slate-600 text-sm">Sat - Thu: 9:00 AM - 8:00 PM (Friday Closed)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="lg:col-span-7 bg-slate-50 border border-slate-100 rounded-3xl p-8 shadow-xl">
+                    <form id="contactForm" onsubmit="submitContact(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Your Name</label>
+                                <input type="text" id="contactName" required placeholder="John Doe" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-brand-600 transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Phone Number</label>
+                                <input type="tel" id="contactPhone" required placeholder="+880 17..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-brand-600 transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
+                            <input type="email" id="contactEmail" required placeholder="john@example.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-brand-600 transition">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Message or Inquiry</label>
+                            <textarea id="contactMsg" rows="4" required placeholder="Tell us about your paint requirements..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-brand-600 transition"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/20 transition flex items-center justify-center gap-2">
+                            <span>Send Message</span>
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white">
+                            <i data-lucide="palette" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-xl font-bold text-white">Rong Bahari</span>
+                    </div>
+                    <p class="text-sm text-slate-400">Your ultimate destination for premium wall paints, vibrant color shades, and reliable waterproofing solutions.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#home" class="hover:text-white transition">Home</a></li>
+                        <li><a href="#catalog" class="hover:text-white transition">Product Catalog</a></li>
+                        <li><a href="#calculator" class="hover:text-white transition">Paint Calculator</a></li>
+                        <li><a href="#services" class="hover:text-white transition">Our Services</a></li>
+                        <li><a href="#contact" class="hover:text-white transition">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Product Categories</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><span class="hover:text-white transition cursor-pointer" onclick="filterProducts('Interior')">Interior Emulsion</span></li>
+                        <li><span class="hover:text-white transition cursor-pointer" onclick="filterProducts('Exterior')">Exterior Shield</span></li>
+                        <li><span class="hover:text-white transition cursor-pointer" onclick="filterProducts('Enamel')">Gloss Enamel</span></li>
+                        <li><span class="hover:text-white transition cursor-pointer" onclick="filterProducts('Waterproofing')">Waterproofing</span></li>
+                        <li><span class="hover:text-white transition cursor-pointer" onclick="filterProducts('Primer')">Wall Primers</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Stay Updated</h4>
+                    <p class="text-sm text-slate-400 mb-4">Subscribe to get seasonal color trends and discount offers.</p>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="Your email" class="bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500 w-full">
+                        <button onclick="showModal('Subscribed!', 'Thank you for subscribing to Rong Bahari updates.')" class="px-4 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-sm font-semibold transition">Join</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-800 text-center text-sm text-slate-500">
+                <p>&copy; 2026 Rong Bahari (রং বাহারী). All rights reserved. Designed for stunning home makeovers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Product Data Catalog
+        const products = [
+            {
+                id: 1,
+                name: "Velvet Touch Interior Emulsion",
+                category: "Interior",
+                price: 450,
+                unit: "Per Liter",
+                rating: 4.9,
+                desc: "Luxurious silky matte finish with stain-guard technology and anti-fungal properties.",
+                image: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?q=80&w=600&auto=format&fit=crop",
+                swatch: "#F4A261"
+            },
+            {
+                id: 2,
+                name: "Royal Silk Washable Paint",
+                category: "Interior",
+                price: 580,
+                unit: "Per Liter",
+                rating: 4.8,
+                desc: "Premium rich sheen finish that allows effortless cleaning of marks and stains.",
+                image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=600&auto=format&fit=crop",
+                swatch: "#E76F51"
+            },
+            {
+                id: 3,
+                name: "Weather Shield Max Exterior",
+                category: "Exterior",
+                price: 520,
+                unit: "Per Liter",
+                rating: 5.0,
+                desc: "Ultimate UV defense and heavy rain protection, preventing algae and cracks for 10+ years.",
+                image: "https://images.unsplash.com/photo-1541123437800-1bb1317badc2?q=80&w=600&auto=format&fit=crop",
+                swatch: "#2A9D8F"
+            },
+            {
+                id: 4,
+                name: "Apex Weather Guard Plus",
+                category: "Exterior",
+                price: 610,
+                unit: "Per Liter",
+                rating: 4.7,
+                desc: "Advanced fiber-reinforced exterior emulsion designed for extreme tropical climates.",
+                image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=600&auto=format&fit=crop",
+                swatch: "#457B9D"
+            },
+            {
+                id: 5,
+                name: "Super Gloss Enamel Paint",
+                category: "Enamel",
+                price: 600,
+                unit: "Per Liter",
+                rating: 4.9,
+                desc: "Mirror-like gloss finish for wooden doors, metal gates, and furniture with rust protection.",
+                image: "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?q=80&w=600&auto=format&fit=crop",
+                swatch: "#1D3557"
+            },
+            {
+                id: 6,
+                name: "Damp-Proof Waterproofing Guard",
+                category: "Waterproofing",
+                price: 650,
+                unit: "Per Liter",
+                rating: 5.0,
+                desc: "Heavy-duty elastomeric waterproof coating for roofs, parapets, and damp walls.",
+                image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=600&auto=format&fit=crop",
+                swatch: "#E63946"
+            },
+            {
+                id: 7,
+                name: "Acrylic Wall Primer (Interior/Exterior)",
+                category: "Primer",
+                price: 320,
+                unit: "Per Liter",
+                rating: 4.8,
+                desc: "High adhesion undercoat that ensures strong bonding and reduces topcoat consumption.",
+                image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=600&auto=format&fit=crop",
+                swatch: "#A8DADC"
+            },
+            {
+                id: 8,
+                name: "Anti-Rust Red Oxide Primer",
+                category: "Primer",
+                price: 350,
+                unit: "Per Liter",
+                rating: 4.7,
+                desc: "Superior metal primer offering robust anti-corrosive protection for iron and steel surfaces.",
+                image: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?q=80&w=600&auto=format&fit=crop",
+                swatch: "#9A031E"
+            }
+        ];
+
+        // Render Products
+        function renderProducts(filter = 'all') {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' 
+                ? products 
+                : products.filter(p => p.category.toLowerCase() === filter.toLowerCase());
+
+            filtered.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-xl transition flex flex-col justify-between group";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative mb-6 overflow-hidden rounded-2xl aspect-[4/3]">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-semibold text-slate-800 flex items-center gap-1 shadow-sm">
+                                <i data-lucide="star" class="w-3.5 h-3.5 text-amber-500 fill-current"></i>
+                                <span>${product.rating}</span>
+                            </div>
+                            <div class="absolute bottom-3 left-3 w-8 h-8 rounded-full border-2 border-white shadow-md color-swatch-shadow" style="background-color: ${product.swatch};"></div>
+                        </div>
+
+                        <span class="text-xs font-semibold text-brand-600 uppercase tracking-wider">${product.category}</span>
+                        <h3 class="text-xl font-bold text-slate-900 mt-1 mb-2">${product.name}</h3>
+                        <p class="text-slate-600 text-sm mb-4 leading-relaxed">${product.desc}</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-200/60 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-slate-400 block">${product.unit}</span>
+                            <span class="text-xl font-extrabold text-slate-900">৳${product.price}</span>
+                        </div>
+                        <button onclick="inquireProduct('${product.name}', ${product.price})" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm rounded-xl shadow-md transition flex items-center gap-1.5">
+                            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                            <span>Inquire</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Filter Function
+        function filterProducts(category) {
+            // Update active tab buttons
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn px-5 py-2.5 rounded-full text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
+            });
+            event.target.className = "cat-btn px-5 py-2.5 rounded-full text-sm font-medium bg-slate-900 text-white shadow-sm transition";
+
+            renderProducts(category);
+        }
+
+        // Initial Render
+        renderProducts('all');
+
+        // Calculator Logic
+        function calculatePaint(e) {
+            e.preventDefault();
+            const length = parseFloat(document.getElementById('roomLength').value);
+            const width = parseFloat(document.getElementById('roomWidth').value);
+            const height = parseFloat(document.getElementById('roomHeight').value);
+            const openings = parseInt(document.getElementById('openings').value);
+            const paintType = document.getElementById('paintType').value;
+            const coats = parseInt(document.getElementById('coats').value);
+
+            // Perimeter * Height = Total Wall Area
+            const perimeter = 2 * (length + width);
+            let grossArea = perimeter * height;
+            // Subtract approx 20 sq ft per door/window
+            let netArea = grossArea - (openings * 20);
+            if (netArea < 10) netArea = 10;
+
+            // Coverage: 1 liter covers approx 100 sq ft per coat
+            let totalSqFt = netArea * coats;
+            let litersNeeded = Math.ceil(totalSqFt / 100);
+
+            // Price per liter based on selection
+            let pricePerLiter = 450;
+            if (paintType === 'exterior') pricePerLiter = 520;
+            if (paintType === 'enamel') pricePerLiter = 600;
+            if (paintType === 'waterproofing') pricePerLiter = 650;
+
+            let totalCost = litersNeeded * pricePerLiter;
+
+            // Update UI
+            document.getElementById('resArea').innerText = netArea + ' sq.ft';
+            document.getElementById('resLiters').innerText = litersNeeded + ' Liters (' + coats + ' coats)';
+            document.getElementById('resCost').innerText = '৳' + totalCost.toLocaleString();
+        }
+
+        // Trigger initial calculation
+        window.addEventListener('DOMContentLoaded', () => {
+            // simulate initial submit
+            const lenInput = document.getElementById('roomLength');
+            if(lenInput) {
+                // mock calculation run
+                const event = { preventDefault: () => {} };
+                calculatePaint(event);
+            }
+        });
+
+        // Modal Functions
+        function showModal(title, message, isSuccess = true) {
+            const modal = document.getElementById('notificationModal');
+            const modalContent = document.getElementById('modalContent');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const iconContainer = document.getElementById('modalIconContainer');
+
+            modalTitle.innerText = title;
+            modalMessage.innerText = message;
+
+            if(isSuccess) {
+                iconContainer.className = "w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4";
+                iconContainer.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
+            } else {
+                iconContainer.className = "w-12 h-12 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center mx-auto mb-4";
+                iconContainer.innerHTML = '<i data-lucide="info" class="w-6 h-6"></i>';
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('notificationModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function inquireProduct(productName, price) {
+            showModal('Inquiry Received!', `Thank you for your interest in "${productName}" (৳${price}/L). Our store executive will contact you shortly.`);
+        }
+
+        function orderCalculatedPaint() {
+            const cost = document.getElementById('resCost').innerText;
+            const liters = document.getElementById('resLiters').innerText;
+            showModal('Estimate Booked!', `Your calculated requirement of ${liters} amounting to ${cost} has been registered. We will call you to confirm delivery.`);
+        }
+
+        function submitContact(e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            showModal('Message Sent!', `Thank you ${name}! We have received your message and will get back to you within 24 hours.`);
+            document.getElementById('contactForm').reset();
+        }
+
+        function selectColor(hexCode, colorName) {
+            showModal('Color Selected', `You clicked on swatch: ${colorName} (${hexCode}). Visit our store for matching computerized tinting!`);
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
